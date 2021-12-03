@@ -1,41 +1,64 @@
 module Day03 where
 
-import Data.Char (digitToInt)
-import Data.List (transpose)
+import Data.List (foldl', transpose)
 
-type Bit = Int
+data Bit = Zero | One deriving (Eq, Show)
 
 type Bits = [Bit]
 
-parse :: String -> [Bits]
-parse = map (map digitToInt) . lines
-
-gamma' :: [Bits] -> Bits
-gamma' bits = map (prevalentBit . sum) $ transpose bits
-  where
-    bitsLength :: Int
-    bitsLength = length bits
-
-    prevalentBit :: Int -> Bit
-    prevalentBit bitsSum = if 2 * bitsSum > bitsLength then 1 else 0
+count :: (a -> Bool) -> [a] -> Int
+count p = length . filter p
 
 bitsToDecimal :: Bits -> Int
-bitsToDecimal = foldl (\acc b -> 2 * acc + b) 0
+bitsToDecimal = foldl' (\acc b -> 2 * acc + if b == Zero then 0 else 1) 0
+
+complement :: Bit -> Bit
+complement One = Zero
+complement Zero = One
+
+moreCommon :: Bits -> Bit
+moreCommon bits
+  | count (== Zero) bits <= count (== One) bits = One
+  | otherwise = Zero
+
+lessCommon :: Bits -> Bit
+lessCommon = complement . moreCommon
+
+parse :: String -> [Bits]
+parse = map (map charToBit) . lines
+  where
+    charToBit :: Char -> Bit
+    charToBit '0' = Zero
+    charToBit '1' = One
+    charToBit x = error $ x : " is not 0 or 1"
+
+chooseByCol :: (Bits -> Bit) -> [Bits] -> Bits
+chooseByCol chooser = map chooser . transpose
 
 gamma :: [Bits] -> Int
-gamma = bitsToDecimal . gamma'
-
-complement :: Bits -> Bits
-complement = map (\b -> if b == 0 then 1 else 0)
+gamma = bitsToDecimal . chooseByCol moreCommon
 
 epsilon :: [Bits] -> Int
-epsilon = bitsToDecimal . complement . gamma'
+epsilon = bitsToDecimal . chooseByCol lessCommon
 
 part1 :: [Bits] -> Int
 part1 bits = gamma bits * epsilon bits
 
+filterByCol :: (Bits -> Bit) -> [Bits] -> Bits
+filterByCol _ [bits] = bits
+filterByCol chooser bitss =
+  chosenBits : filterByCol chooser [bitss' | bits : bitss' <- bitss, chosenBits == bits]
+  where
+    chosenBits = chooser [bits | bits : _ <- bitss]
+
+o2 :: [Bits] -> Int
+o2 = bitsToDecimal . filterByCol moreCommon
+
+co2 :: [Bits] -> Int
+co2 = bitsToDecimal . filterByCol lessCommon
+
 part2 :: [Bits] -> Int
-part2 _ = 0
+part2 bits = o2 bits * co2 bits
 
 main :: IO ()
 main = do
