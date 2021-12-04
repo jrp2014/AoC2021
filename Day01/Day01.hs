@@ -1,4 +1,4 @@
-module Day01 where
+module Day01.Day01 where
 
 import Control.Applicative (ZipList (..), getZipList)
 import Data.List (tails)

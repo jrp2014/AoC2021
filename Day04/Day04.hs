@@ -1,4 +1,4 @@
-module Day04 where
+module Day04.Day04 where
 
 -- https://gitlab.com/sakisan/adventofcode/-/blob/2021/Haskell/Day04.hs
 
