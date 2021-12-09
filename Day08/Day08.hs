@@ -47,7 +47,7 @@ calcDisplay (ev, ss) =
   segsToDigit (ss !! 0) * 1000
     + segsToDigit (ss !! 1) * 100
     + segsToDigit (ss !! 2) * 10
-    + egsToDigit (ss !! 3)
+    + segsToDigit (ss !! 3)
   where
     segsToDigit :: Segments -> Int
     segsToDigit segs =
