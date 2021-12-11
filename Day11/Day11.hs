@@ -1,11 +1,9 @@
-{-# LANGUAGE TupleSections #-}
-
 module Day11.Day11 where
 
 -- https://github.com/glguy/advent2021/blob/main/execs/Day11.hs
 
 import Data.Char (digitToInt)
-import Data.List (foldl', elemIndex)
+import Data.List (elemIndex, foldl')
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.Maybe (fromJust)
