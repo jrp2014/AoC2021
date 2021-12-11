@@ -17,13 +17,13 @@ type EnergyLevelMap = Map Coord Energy
 neighbours :: Coord -> [Coord]
 neighbours (y, x) =
   [ (y, x - 1),
-    (y + 1, x),
-    (y, x + 1),
-    (y - 1, x),
-    (y - 1, x - 1),
-    (y - 1, x + 1),
+    (y + 1, x + 1),
     (y + 1, x - 1),
-    (y + 1, x + 1)
+    (y + 1, x),
+    (y - 1, x + 1),
+    (y - 1, x - 1),
+    (y - 1, x),
+    (y, x + 1)
   ]
 
 count :: Foldable t => (a -> Bool) -> t a -> Int
@@ -37,7 +37,7 @@ parse s =
         (x, z) <- zip [0 ..] xs
     ]
 
--- | Initial grid state to flashes per step
+-- | Returns a list of the number of flashes that have occured at every step
 simulate :: EnergyLevelMap -> [Energy]
 simulate = fmap (count (0 ==)) . tail . iterate step
 
@@ -54,12 +54,14 @@ excite m x =
       | e >= 1 -> Map.insert x (1 + e) m
     _ -> m
 
+-- | The total number of flashes that fired in the first 100 steps.
 part1 :: EnergyLevelMap -> Int
 part1 m = sum (take 100 flashes)
   where
     flashes :: [Energy]
     flashes = simulate m
 
+-- | Find first index in the list of flashes / step which is the same size as the grid (ie, all flashes fired)
 part2 :: EnergyLevelMap -> Int
 part2 m = 1 + fromJust (elemIndex (Map.size m) flashes)
   where
@@ -71,7 +73,6 @@ main = do
   putStr "Test Part 1: "
   tinput <- readFile "test.txt"
   let ptinput = parse tinput
-
   print $ part1 ptinput
 
   putStr "Part 1: "
