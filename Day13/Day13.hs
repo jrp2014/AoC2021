@@ -2,7 +2,7 @@ module Day13.Day13 where
 
 -- https://github.com/glguy/advent2021/blob/main/execs/Day13.hs
 
-import Data.Bifunctor
+import Data.Bifunctor ( Bifunctor(first, second) )
 import Data.List.Split (splitOn)
 import Data.Map (Map)
 import qualified Data.Map as Map
