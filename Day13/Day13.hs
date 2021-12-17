@@ -47,8 +47,8 @@ fold1 ::
   Int ->
   Int
 fold1 a i = a - abs (a - i)
-
 solve :: Input -> [Set Coord]
+
 solve (folds, pointSet) = scanl (flip foldPoints) pointSet folds
 
 part1 :: Input -> Int
