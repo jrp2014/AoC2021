@@ -15,7 +15,6 @@ part1 i = sum [abs (x - median) | x <- i]
     median :: Int
     median = sort i !! (length i `div` 2)
 
-
 -- As the number of crabs becomes large, the optimal horizontal position tends
 -- to their mean position (rather than their median, which was the case for part
 -- 1).  But that may not be an integer, so just brute force
@@ -26,7 +25,7 @@ part2 i = minimum [sum [cost (abs (x - y)) | x <- i] | y <- [lo .. hi]]
     hi = maximum i
     cost d = d * (d + 1) `div` 2
 
--- The mean minimises the sum of squares 
+-- The mean minimises the sum of squares
 part2' :: Input -> Int
 part2' i = sum [cost $ abs (x - mean) | x <- i]
   where
